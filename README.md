@@ -14,7 +14,7 @@ This project provides a simple web application for scanning barcodes using a web
 ## Setup and Installation
 
 1. Ensure you have Java and Maven installed on your machine.
-2. Clone the repository: `git clone https://github.com/JosephDeleon-1/barcode-inventory.git`.
+2. Clone the repository: `git clone https://github.com/JosephDeleon-1/barcode-inventory-new.git`.
 3. Navigate to the project directory: `cd barcodescanner`.
 4. Install dependencies: `mvn install`.
 5. Run the application: `mvn spring-boot:run`.
