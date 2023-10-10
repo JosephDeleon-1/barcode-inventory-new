@@ -5,10 +5,16 @@
 This project provides a simple web application for scanning barcodes using a webcam. Users can manually enter product details associated with a barcode, view the list of products, and manage them (edit/delete).
 
 ## Features
-- Capture images via webcam
-- Decode barcodes from captured images.
-- Manually enter product details associated with a barcode.
-- View, edit, and delete products.
+
+### Capture images via webcam and view barcode list
+![Webcam Scan with Barcode List](./assets/webcam-scan-&-barcode-list.gif)
+
+### Manually enter product details associated with a barcode
+![Manual Product Entry](./assets/manual-product-entry.gif)
+
+### View, edit, and delete products
+![Editing the Product List](./assets/edit-product-list.gif)
+![Deleting a Product](./assets/delete-product.gif)
 
 ## Setup and Installation
 
