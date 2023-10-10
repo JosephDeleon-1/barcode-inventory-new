@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product List</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Bootstrap Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Barcode Scanner</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/scan">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/barcodes">View Barcodes</a>
+      </li>
+      <!-- Product List and Product Entry Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Products
+        </a>
+        <div class="dropdown-menu" aria-labelledby="productDropdown">
+          <a class="dropdown-item" href="/product-list">Product List</a>
+          <a class="dropdown-item" href="/product-entry">Add Product</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="container mt-5">
+  <h1>Product List</h1>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Barcode Value</th>
+      <th>Product Name</th>
+      <th>Description</th>
+      <th>Actions</th> <!-- Column header for actions -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+      <td th:text="${product.barcodeValue}"></td>
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.description}"></td>
+      <td>
+        <!-- Edit and Delete buttons. You can link them to appropriate endpoints -->
+        <a th:href="@{'/edit-product/' + ${product.id}}" class="btn btn-warning btn-sm">Edit</a>
+        <a th:href="@{'/delete-product/' + ${product.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Optional: Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+

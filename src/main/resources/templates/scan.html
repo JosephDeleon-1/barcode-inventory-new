@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Barcode Scanner</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    #webcamContainer {
+      position: relative;
+      width: 640px;
+      height: 480px;
+    }
+
+    #scanArea {
+      position: absolute;
+      top: 25%;
+      left: 25%;
+      width: 50%;
+      height: 50%;
+      border: 3px dashed #00ff00; /* Green dashed border */
+      box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5); /* Dim outside the scan area */
+    }
+  </style>
+</head>
+<body>
+
+<!-- Bootstrap Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Barcode Scanner</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/scan">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/barcodes">View Barcodes</a>
+      </li>
+      <!-- Product List and Product Entry Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Products
+        </a>
+        <div class="dropdown-menu" aria-labelledby="productDropdown">
+          <a class="dropdown-item" href="/product-list">Product List</a>
+          <a class="dropdown-item" href="/product-entry">Add Product</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- Main content -->
+<div class="container mt-5">
+  <h1>Barcode Scanner</h1>
+
+  <!-- Webcam Preview -->
+  <div id="webcamContainer">
+    <video id="webcam" width="640" height="480" autoplay playsinline></video>
+    <div id="scanArea"></div>
+  </div>
+  <br>
+  <!-- Button to Start Scan -->
+  <button id="scanNow" class="btn btn-primary">Scan Now</button>
+</div>
+
+<!-- JavaScript for Webcam Feed and Scan Action -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const video = document.getElementById('webcam');
+    const scanNowButton = document.getElementById('scanNow');
+
+    // Get webcam feed and display it in the video element
+    navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+              video.srcObject = stream;
+            })
+            .catch(err => {
+              console.error("Error accessing webcam: ", err);
+            });
+
+    // Scan action when the button is clicked
+    scanNowButton.addEventListener('click', function() {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      canvas.toBlob(function(blob) {
+        const formData = new FormData();
+        formData.append('image', blob);
+
+        fetch('/process-image', {
+          method: 'POST',
+          body: formData
+        })
+                .then(response => response.text())
+                .then(barcodeValue => {
+                  if (barcodeValue === "Error: invalid barcode") {
+                    alert("Error: invalid barcode");
+                  } else {
+                    alert(`Barcode scanned successfully: ${barcodeValue}`);
+                    window.location.href = "/barcodes";
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  alert("There was an error processing the barcode.");
+                });
+      }, 'image/jpeg');
+    });
+  });
+</script>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
